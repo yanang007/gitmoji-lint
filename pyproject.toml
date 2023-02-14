@@ -1,0 +1,32 @@
+[build-system]
+requires = ["setuptools>=63.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "gitmoji-lint"
+version = "0.0.1"
+authors = [
+    { name="yanang007", email="yanang007@gmail.com" },
+]
+description = "A linter that checks your gitmojis."
+readme = "README.md"
+requires-python = ">=3.7"
+license = { file = "LICENSE.txt" }
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
+    "License :: OSI Approved :: MIT License",
+]
+dependencies = []
+
+[project.scripts]
+gitmoji-lint = "gitmoji_lint.gitmoji_convention:main"
+
+[project.urls]
+Homepage = "https://github.com/yanang007/gitmoji-lint"
+
+[tool.setuptools.packages.find]
+include = ["gitmoji_lint*"]
+
+[tool.setuptools.package-data]
+"gitmoji_lint.data" = ["*.json"]

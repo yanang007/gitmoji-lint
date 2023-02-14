@@ -1,0 +1,8 @@
+- id: gitmoji-lint
+  name: gitmoji-lint
+  description: Checks the gitmojis in your commit messages.
+  language: python
+  additional_dependencies: []
+  entry: gitmoji-lint
+  args: []
+  stages: [commit-msg]
