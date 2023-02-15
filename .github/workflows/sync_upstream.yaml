@@ -1,0 +1,48 @@
+name: Sync Upstream
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 0 * * *'
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      - name: 'Fetch Upstream'
+        run: |
+          COMMIT_SHA=$(python ./tools/sync_upstream.py --fetch-upstream)
+          
+          echo "COMMIT_SUBJECT=$(python ./tools/sync_upstream.py --format-subject $COMMIT_SHA)" >> $GITHUB_ENV
+          
+          echo 'COMMIT_MSG<<EOF' >> $GITHUB_ENV
+          python ./tools/sync_upstream.py --format-msg $COMMIT_SHA >> $GITHUB_ENV
+          echo 'EOF' >> $GITHUB_ENV
+          
+          echo 'PR_BODY<<EOF' >> $GITHUB_ENV
+          python ./tools/sync_upstream.py --format-pr-body $COMMIT_SHA >> $GITHUB_ENV
+          echo 'EOF' >> $GITHUB_ENV
+
+      - name: 'Create Pull Request'
+        uses: peter-evans/create-pull-request@v4
+        with:
+          add-paths: gitmoji_lint/data/**
+          commit-message: ${{ env.COMMIT_MSG }}
+          title: ${{ env.COMMIT_SUBJECT }}
+          body: ${{ env.PR_BODY }}
+          branch: bot/sync-upstream
+          delete-branch: true
+          labels: |
+            automated pr
+          reviewers: yanang007
