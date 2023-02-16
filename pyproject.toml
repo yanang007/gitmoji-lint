@@ -17,10 +17,13 @@ classifiers = [
     "Operating System :: OS Independent",
     "License :: OSI Approved :: MIT License",
 ]
-dependencies = []
+dependencies = [
+    'commitizen',
+    'click'
+]
 
 [project.scripts]
-gitmoji-lint = "gitmoji_lint.gitmoji_convention:main"
+gitmoji-lint = "gitmoji_lint.cli:cli"
 
 [project.urls]
 Homepage = "https://github.com/yanang007/gitmoji-lint"

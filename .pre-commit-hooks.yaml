@@ -1,8 +1,19 @@
 - id: gitmoji-lint
-  name: gitmoji-lint
+  name: gitmoji lint commit
   description: Checks the gitmojis in your commit messages.
   language: python
   additional_dependencies: []
   entry: gitmoji-lint
-  args: []
+  args: [--commit-msg-file]
   stages: [commit-msg]
+
+- id: gitmoji-lint-branch
+  name: gitmoji lint branch
+  description: Checks the gitmojis in all commits in current branch but not present in default branch.
+  language: python
+  additional_dependencies: []
+  entry: gitmoji-lint
+  # NOTE: origin/HEAD is only set up automatically during the initial git clone
+  args: [--rev-range, origin/HEAD..HEAD]
+  always_run: true
+  pass_filenames: false
